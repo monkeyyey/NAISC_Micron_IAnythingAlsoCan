@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log Pipeline Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ── Reset & base ──────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg0:#07111f;--bg1:#0f1e2e;--bg2:#182638;--bg3:#1e3045;--bg4:#253a52;
+  --border:#2a3f56;--border2:#34516b;
+  --accent:#5b8dee;--accent2:#7aa5f5;--accent-bg:rgba(91,141,238,.12);
+  --green:#34d399;--green-bg:rgba(52,211,153,.12);
+  --amber:#fbbf24;--amber-bg:rgba(251,191,36,.12);
+  --red:#f87171;--red-bg:rgba(248,113,113,.12);
+  --violet:#a78bfa;--violet-bg:rgba(167,139,250,.12);
+  --sky:#38bdf8;--sky-bg:rgba(56,189,248,.12);
+  --text1:#e8f0fe;--text2:#94aec8;--text3:#5a7a96;
+  --radius:10px;--radius-sm:6px;--radius-lg:14px;
+  --shadow:0 4px 24px rgba(0,0,0,.4);
+  --transition:.18s ease;
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg0);color:var(--text1);font-size:14px;line-height:1.5}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+input,select,textarea{font-family:inherit;outline:none;border:none}
+a{text-decoration:none}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border2)}
+
+/* ── Layout ────────────────────────────────────────────────────────── */
+#app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* Header */
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;height:56px;background:var(--bg1);
+  border-bottom:1px solid var(--border);flex-shrink:0;
+  box-shadow:0 1px 0 var(--border);z-index:10
+}
+.logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:var(--text1)}
+.logo svg{width:28px;height:28px}
+.logo span{color:var(--accent)}
+.header-right{display:flex;align-items:center;gap:10px}
+.header-center{display:flex;align-items:center;gap:10px}
+.nav-link{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:34px;padding:0 12px;border-radius:6px;
+  background:var(--bg3);border:1px solid var(--border);color:var(--text2);
+  font-size:13px;font-weight:600;transition:var(--transition)
+}
+.nav-link:hover,.nav-link.active{background:var(--accent-bg);border-color:var(--accent);color:var(--text1)}
+.status-pill{
+  display:flex;align-items:center;gap:6px;padding:4px 10px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:20px;
+  font-size:12px;color:var(--text2)
+}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);transition:background .3s}
+.status-dot.active{background:var(--green);box-shadow:0 0 6px var(--green)}
+.btn-icon{
+  width:34px;height:34px;border-radius:var(--radius-sm);background:var(--bg3);
+  border:1px solid var(--border);color:var(--text2);font-size:16px;
+  display:flex;align-items:center;justify-content:center;transition:var(--transition)
+}
+.btn-icon:hover{background:var(--bg4);color:var(--text1);border-color:var(--border2)}
+
+/* Body layout */
+.body{display:flex;flex:1;overflow:hidden}
+
+/* Sidebar */
+.sidebar{
+  width:280px;flex-shrink:0;background:var(--bg1);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden
+}
+.sidebar-section{padding:14px 16px;border-bottom:1px solid var(--border)}
+.sidebar-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+
+/* Upload zone */
+.drop-zone{
+  border:2px dashed var(--border2);border-radius:var(--radius);padding:18px;
+  text-align:center;cursor:pointer;transition:var(--transition);background:var(--bg2);position:relative
+}
+.drop-zone:hover,.drop-zone.drag-over{
+  border-color:var(--accent);background:var(--accent-bg)
+}
+.drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-icon{font-size:28px;margin-bottom:6px}
+.drop-text{font-size:12px;color:var(--text2);line-height:1.6}
+.drop-text strong{color:var(--accent);font-size:13px}
+
+/* Select */
+.field{margin-top:10px}
+.field label{display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500}
+.select-wrap{position:relative}
+.select-wrap::after{
+  content:"▾";position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  color:var(--text3);pointer-events:none;font-size:12px
+}
+select.input-dark{
+  width:100%;padding:7px 28px 7px 10px;background:var(--bg3);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  color:var(--text1);font-size:13px;appearance:none;-webkit-appearance:none;cursor:pointer
+}
+select.input-dark:focus{border-color:var(--accent)}
+
+/* Sidebar buttons */
+.btn-primary{
+  width:100%;padding:8px 14px;background:var(--accent);color:#fff;
+  border-radius:var(--radius-sm);font-size:13px;font-weight:600;
+  transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px
+}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-primary:active{transform:none}
+.btn-secondary{
+  width:100%;padding:7px 14px;background:var(--bg3);color:var(--text2);
+  border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:500;
+  transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px
+}
+.btn-secondary:hover{background:var(--bg4);color:var(--text1);border-color:var(--border2)}
+.btn-danger{
+  padding:6px 12px;background:var(--red-bg);color:var(--red);
+  border:1px solid rgba(248,113,113,.25);border-radius:var(--radius-sm);font-size:12px;font-weight:500;
+  transition:var(--transition)
+}
+.btn-danger:hover{background:rgba(248,113,113,.2);border-color:var(--red)}
+
+/* File list */
+.file-list-wrap{flex:1;overflow-y:auto;padding:6px 8px}
+.file-item{
+  display:flex;align-items:center;gap:8px;padding:8px 8px;
+  border-radius:var(--radius-sm);margin-bottom:2px;cursor:default;transition:var(--transition);
+  border:1px solid transparent
+}
+.file-item:hover{background:var(--bg3);border-color:var(--border)}
+.file-ext{
+  width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;letter-spacing:.5px;font-family:'JetBrains Mono',monospace
+}
+.file-info{flex:1;min-width:0}
+.file-name{font-size:12px;color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-size{font-size:11px;color:var(--text3)}
+.file-actions{display:flex;gap:4px;opacity:0;transition:var(--transition)}
+.file-item:hover .file-actions{opacity:1}
+.icon-btn{
+  width:26px;height:26px;border-radius:5px;background:var(--bg4);
+  border:1px solid var(--border2);color:var(--text2);font-size:13px;
+  display:flex;align-items:center;justify-content:center;transition:var(--transition)
+}
+.icon-btn:hover{color:var(--text1);background:var(--bg0)}
+.icon-btn.run:hover{color:var(--green)}
+.icon-btn.del:hover{color:var(--red)}
+
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg0)}
+
+/* Tabs */
+.tab-bar{
+  display:flex;gap:2px;padding:12px 20px 0;background:var(--bg1);
+  border-bottom:1px solid var(--border);flex-shrink:0
+}
+.tab{
+  padding:8px 16px;border-radius:var(--radius-sm) var(--radius-sm) 0 0;
+  background:transparent;color:var(--text3);font-size:13px;font-weight:500;
+  border:1px solid transparent;border-bottom:none;transition:var(--transition);
+  margin-bottom:-1px;position:relative
+}
+.tab:hover{color:var(--text2);background:var(--bg2)}
+.tab.active{
+  background:var(--bg0);color:var(--accent2);border-color:var(--border);
+  border-bottom-color:var(--bg0)
+}
+.tab-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:18px;height:18px;border-radius:9px;background:var(--accent-bg);
+  color:var(--accent2);font-size:10px;font-weight:700;padding:0 5px;margin-left:6px
+}
+.tab-content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.tab-panel{flex:1;overflow-y:auto;padding:20px;display:none}
+.tab-panel.active{display:block}
+
+/* ── Dashboard ─────────────────────────────────────────────────────── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px;transition:var(--transition)
+}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.stat-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.6px}
+.stat-icon{
+  width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px
+}
+.stat-value{font-size:26px;font-weight:700;color:var(--text1);line-height:1}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
+
+.charts-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+.chart-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px
+}
+.chart-title{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:14px;text-transform:uppercase;letter-spacing:.6px}
+.chart-wrap{position:relative;height:180px}
+
+/* History table */
+.section-title{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead th{
+  padding:9px 12px;background:var(--bg3);color:var(--text3);font-size:11px;
+  font-weight:600;text-transform:uppercase;letter-spacing:.6px;text-align:left;
+  border-bottom:1px solid var(--border);white-space:nowrap
+}
+thead th.sortable{cursor:pointer;user-select:none}
+thead th.sortable:hover{color:var(--text2)}
+tbody tr{border-bottom:1px solid var(--border);transition:background var(--transition)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg3)}
+tbody td{padding:9px 12px;font-size:13px;color:var(--text2)}
+tbody td.primary{color:var(--text1)}
+.empty-state{
+  padding:40px;text-align:center;color:var(--text3);font-size:13px
+}
+.empty-icon{font-size:32px;margin-bottom:8px}
+
+/* ── Records tab ────────────────────────────────────────────────────── */
+.filter-bar{
+  display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap
+}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-wrap input{
+  width:100%;padding:8px 12px 8px 34px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  color:var(--text1);font-size:13px;transition:var(--transition)
+}
+.search-wrap input:focus{border-color:var(--accent);background:var(--bg3)}
+.search-icon{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  color:var(--text3);font-size:14px;pointer-events:none
+}
+.filter-select{
+  padding:7px 28px 7px 10px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  color:var(--text2);font-size:12px;appearance:none;-webkit-appearance:none;
+  cursor:pointer;min-width:110px;transition:var(--transition)
+}
+.filter-select:focus{border-color:var(--accent);color:var(--text1)}
+.filter-select-wrap{position:relative}
+.filter-select-wrap::after{
+  content:"▾";position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  color:var(--text3);pointer-events:none;font-size:11px
+}
+.record-count{font-size:12px;color:var(--text3);white-space:nowrap}
+
+/* Level badges */
+.badge{
+  display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;
+  font-size:11px;font-weight:600;letter-spacing:.3px;white-space:nowrap;
+  font-family:'JetBrains Mono',monospace
+}
+.badge-DEBUG   {background:rgba(148,174,200,.12);color:#94aec8}
+.badge-TRACE   {background:var(--violet-bg);color:var(--violet)}
+.badge-INFO    {background:var(--sky-bg);color:var(--sky)}
+.badge-NOTICE  {background:var(--green-bg);color:var(--green)}
+.badge-WARN    {background:var(--amber-bg);color:var(--amber)}
+.badge-WARNING {background:var(--amber-bg);color:var(--amber)}
+.badge-ERROR   {background:var(--red-bg);color:var(--red)}
+.badge-CRITICAL{background:rgba(220,38,38,.2);color:#fc8181}
+.badge-FATAL   {background:rgba(220,38,38,.2);color:#fc8181}
+.badge-SEVERE  {background:var(--red-bg);color:var(--red)}
+.badge-corrupt {background:rgba(248,113,113,.15);color:var(--red)}
+.badge-format  {background:var(--accent-bg);color:var(--accent2);font-size:10px}
+.badge-null    {background:var(--bg4);color:var(--text3)}
+
+.msg-cell{max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-family:'JetBrains Mono',monospace;font-size:12px}
+.ts-cell{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);white-space:nowrap}
+.view-btn{
+  padding:3px 8px;background:var(--accent-bg);color:var(--accent2);
+  border:1px solid rgba(91,141,238,.25);border-radius:4px;font-size:11px;
+  cursor:pointer;transition:var(--transition)
+}
+.view-btn:hover{background:rgba(91,141,238,.2);border-color:var(--accent)}
+
+/* Pagination */
+.pagination{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:12px;padding:0 2px
+}
+.pg-info{font-size:12px;color:var(--text3)}
+.pg-btns{display:flex;gap:4px}
+.pg-btn{
+  width:30px;height:30px;border-radius:var(--radius-sm);background:var(--bg2);
+  border:1px solid var(--border);color:var(--text2);font-size:13px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition)
+}
+.pg-btn:hover:not(:disabled){background:var(--bg3);color:var(--text1)}
+.pg-btn:disabled{opacity:.35;cursor:default}
+.pg-btn.current{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.per-page-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)}
+.per-page-wrap select{
+  padding:3px 22px 3px 8px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text2);font-size:12px;appearance:none;cursor:pointer
+}
+
+/* ── Export tab ─────────────────────────────────────────────────────── */
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.export-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px
+}
+.export-card h3{font-size:15px;font-weight:600;color:var(--text1);margin-bottom:6px}
+.export-card p{font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.6}
+.export-options{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);cursor:pointer}
+.checkbox-row input[type=checkbox]{
+  width:15px;height:15px;accent-color:var(--accent);cursor:pointer
+}
+.btn-export{
+  display:inline-flex;align-items:center;gap:8px;padding:9px 16px;
+  background:var(--accent);color:#fff;border-radius:var(--radius-sm);
+  font-size:13px;font-weight:600;cursor:pointer;transition:var(--transition);border:none
+}
+.btn-export:hover{background:var(--accent2);transform:translateY(-1px)}
+
+/* Detect section */
+.detect-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px
+}
+.detect-card h3{font-size:15px;font-weight:600;color:var(--text1);margin-bottom:6px}
+.detect-card p{font-size:12px;color:var(--text3);margin-bottom:12px}
+textarea.input-dark{
+  width:100%;padding:10px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text1);font-size:12px;resize:vertical;
+  font-family:'JetBrains Mono',monospace;line-height:1.5
+}
+textarea.input-dark:focus{border-color:var(--accent)}
+.detect-result{
+  margin-top:10px;padding:10px 14px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);font-size:13px;display:none
+}
+.detect-result span{color:var(--accent2);font-weight:600;font-family:'JetBrains Mono',monospace}
+
+/* ── Record detail panel ────────────────────────────────────────────── */
+.detail-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;
+  opacity:0;pointer-events:none;transition:opacity .2s
+}
+.detail-overlay.open{opacity:1;pointer-events:all}
+.detail-panel{
+  position:fixed;top:0;right:0;bottom:0;width:480px;max-width:90vw;
+  background:var(--bg1);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;transform:translateX(100%);
+  transition:transform .25s cubic-bezier(.4,0,.2,1);z-index:101;overflow:hidden
+}
+.detail-panel.open{transform:translateX(0)}
+.detail-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid var(--border);flex-shrink:0
+}
+.detail-title{font-size:14px;font-weight:600;color:var(--text1)}
+.detail-close{
+  width:28px;height:28px;border-radius:6px;background:var(--bg3);
+  border:1px solid var(--border);color:var(--text2);font-size:16px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition)
+}
+.detail-close:hover{background:var(--bg4);color:var(--text1)}
+.detail-body{flex:1;overflow-y:auto;padding:16px}
+.detail-row{
+  padding:10px 0;border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:120px 1fr;gap:10px
+}
+.detail-row:last-child{border-bottom:none}
+.detail-key{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;padding-top:1px}
+.detail-val{font-size:12px;color:var(--text2);word-break:break-all;
+  font-family:'JetBrains Mono',monospace;line-height:1.6}
+.detail-raw{
+  margin-top:14px;padding:12px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-sm);font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--text2);word-break:break-all;white-space:pre-wrap;line-height:1.6
+}
+.detail-fields{
+  margin-top:4px;display:flex;flex-direction:column;gap:4px
+}
+.field-kv{
+  display:flex;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--bg3);padding:4px 8px;border-radius:4px
+}
+.field-k{color:var(--accent2)}
+.field-v{color:var(--green)}
+
+/* ── Toast ──────────────────────────────────────────────────────────── */
+#toast-container{
+  position:fixed;bottom:20px;right:20px;z-index:200;
+  display:flex;flex-direction:column;gap:8px
+}
+.toast{
+  padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;
+  box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;
+  animation:slideIn .2s ease;max-width:320px;
+  border:1px solid transparent
+}
+.toast.success{background:#0d2e1c;color:var(--green);border-color:rgba(52,211,153,.25)}
+.toast.error  {background:#2e0d0d;color:var(--red);border-color:rgba(248,113,113,.25)}
+.toast.info   {background:#0d1e2e;color:var(--sky);border-color:rgba(56,189,248,.25)}
+.toast.warning{background:#2e1f0d;color:var(--amber);border-color:rgba(251,191,36,.25)}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0;transform:translateX(20px)}}
+
+/* ── Spinner ────────────────────────────────────────────────────────── */
+.spinner{
+  width:14px;height:14px;border:2px solid rgba(255,255,255,.2);
+  border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Progress bar ───────────────────────────────────────────────────── */
+.progress-bar-wrap{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:6px}
+.progress-bar{height:100%;background:var(--accent);border-radius:2px;transition:width .3s}
+
+/* ── Misc ────────────────────────────────────────────────────────────── */
+.gap-8{display:flex;gap:8px}
+.mt-10{margin-top:10px}
+.divider{height:1px;background:var(--border);margin:4px 0}
+.inline-badge{
+  display:inline-flex;align-items:center;padding:1px 6px;
+  border-radius:3px;font-size:11px;font-weight:600;
+  background:var(--accent-bg);color:var(--accent2)
+}
+</style>
+</head>
+<body>
+<div id="app">
+<script>window.APP_BASE = {{ request.script_root|tojson }} || '';</script>
+
+<!-- ── Toast container ─────────────────────────────────────────────── -->
+<div id="toast-container"></div>
+
+<!-- ── Record detail panel ─────────────────────────────────────────── -->
+<div class="detail-overlay" id="detail-overlay" onclick="closeDetail()"></div>
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-header">
+    <span class="detail-title">Record Detail</span>
+    <button class="detail-close" onclick="closeDetail()">✕</button>
+  </div>
+  <div class="detail-body" id="detail-body"></div>
+</div>
+
+<!-- ── Header ──────────────────────────────────────────────────────── -->
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="28" height="28" rx="7" fill="#1e3045"/>
+      <rect x="6" y="7" width="16" height="2.5" rx="1.25" fill="#5b8dee"/>
+      <rect x="6" y="12.75" width="11" height="2.5" rx="1.25" fill="#7aa5f5"/>
+      <rect x="6" y="18.5" width="13" height="2.5" rx="1.25" fill="#5b8dee"/>
+    </svg>
+    Log <span>Pipeline</span>
+  </div>
+  <div class="header-center">
+    <a class="nav-link" href="/analyzer/">Analyzer</a>
+    <a class="nav-link active" href="{{ (request.script_root or '/pipeline') ~ '/' }}">Pipeline Dashboard</a>
+  </div>
+  <div class="header-right">
+    <div class="status-pill">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">Ready</span>
+    </div>
+    <button class="btn-danger" onclick="confirmClear()" title="Clear staging area">⟳ Reset</button>
+  </div>
+</header>
+
+<!-- ── Body ────────────────────────────────────────────────────────── -->
+<div class="body">
+
+  <!-- ── Sidebar ───────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+
+    <!-- Upload -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Upload Log File</div>
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="file-input" multiple accept="*/*">
+        <div class="drop-icon">📂</div>
+        <div class="drop-text"><strong>Click or drag files here</strong><br>Any log format supported</div>
+      </div>
+      <div class="field">
+        <label>Format Override (optional)</label>
+        <div class="select-wrap">
+          <select class="input-dark" id="format-override">
+            <option value="">Auto-detect</option>
+          </select>
+        </div>
+      </div>
+      <div class="gap-8 mt-10">
+        <button class="btn-primary" id="process-all-btn" onclick="processAll()" style="flex:1">
+          ▶ Process All
+        </button>
+      </div>
+    </div>
+
+    <!-- Files -->
+    <div class="sidebar-section" style="flex-shrink:0">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="sidebar-label" style="margin-bottom:0">Log Files</div>
+        <span class="inline-badge" id="file-count">0</span>
+      </div>
+    </div>
+    <div class="file-list-wrap" id="file-list">
+      <div class="empty-state"><div class="empty-icon">📁</div>No files yet</div>
+    </div>
+
+  </aside>
+
+  <!-- ── Main ──────────────────────────────────────────────────────── -->
+  <div class="main">
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')">
+        Dashboard
+      </button>
+      <button class="tab" data-tab="records" onclick="switchTab('records')">
+        Records <span class="tab-badge" id="records-badge">0</span>
+      </button>
+      <button class="tab" data-tab="export" onclick="switchTab('export')">
+        Export & Detect
+      </button>
+    </div>
+
+    <div class="tab-content">
+
+      <!-- ── Dashboard panel ──────────────────────────────────────── -->
+      <div class="tab-panel active" id="tab-dashboard">
+
+        <!-- Stat cards -->
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Total Records</span>
+              <div class="stat-icon" style="background:var(--accent-bg)">📋</div>
+            </div>
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-sub" id="stat-dup">0 duplicates skipped</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Clean</span>
+              <div class="stat-icon" style="background:var(--green-bg)">✅</div>
+            </div>
+            <div class="stat-value" style="color:var(--green)" id="stat-clean">0</div>
+            <div class="stat-sub" id="stat-clean-pct">— success rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Corrupted</span>
+              <div class="stat-icon" style="background:var(--red-bg)">⚠️</div>
+            </div>
+            <div class="stat-value" style="color:var(--red)" id="stat-corrupt">0</div>
+            <div class="stat-sub" id="stat-corrupt-pct">— error rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Formats</span>
+              <div class="stat-icon" style="background:var(--violet-bg)">🗂️</div>
+            </div>
+            <div class="stat-value" style="color:var(--violet)" id="stat-formats">0</div>
+            <div class="stat-sub" id="stat-formats-list">—</div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-title">Log Level Distribution</div>
+            <div class="chart-wrap"><canvas id="level-chart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Format Distribution</div>
+            <div class="chart-wrap"><canvas id="format-chart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Corruption Reasons</div>
+            <div class="chart-wrap"><canvas id="corrupt-chart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Processing history -->
+        <div class="section-title">
+          Processing History
+          <span class="inline-badge" id="history-count">0</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Source</th><th>Format</th><th>Total</th>
+                <th>Clean</th><th>Corrupted</th><th>Success</th><th>Duration</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+              <tr><td colspan="7" class="empty-state"><div class="empty-icon">⏳</div>No files processed yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── Records panel ─────────────────────────────────────────── -->
+      <div class="tab-panel" id="tab-records">
+        <div class="filter-bar">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="search" id="search-input" placeholder="Search messages, fields, source…" oninput="debounceSearch()">
+          </div>
+          <div class="filter-select-wrap">
+            <select class="filter-select" id="level-filter" onchange="loadRecords(1)">
+              <option value="">All levels</option>
+            </select>
+          </div>
+          <div class="filter-select-wrap">
+            <select class="filter-select" id="format-filter" onchange="loadRecords(1)">
+              <option value="">All formats</option>
+            </select>
+          </div>
+          <div class="filter-select-wrap">
+            <select class="filter-select" id="corrupt-filter" onchange="loadRecords(1)">
+              <option value="all">All records</option>
+              <option value="false">Clean only</option>
+              <option value="true">Corrupted only</option>
+            </select>
+          </div>
+          <span class="record-count" id="record-count-label"></span>
+        </div>
+
+        <div class="table-wrap" style="margin-bottom:12px">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:40px">#</th>
+                <th class="sortable" onclick="sortBy('timestamp')">Timestamp ↕</th>
+                <th>Level</th>
+                <th>Format</th>
+                <th>Message</th>
+                <th>Source</th>
+                <th style="width:60px"></th>
+              </tr>
+            </thead>
+            <tbody id="records-tbody">
+              <tr><td colspan="7" class="empty-state"><div class="empty-icon">📄</div>Process files to see records</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <div class="pg-info" id="pg-info"></div>
+          <div class="pg-btns" id="pg-btns"></div>
+          <div class="per-page-wrap">
+            Per page:
+            <div style="position:relative">
+              <select onchange="changePerPage(this.value)" id="per-page-sel">
+                <option value="25">25</option>
+                <option value="50" selected>50</option>
+                <option value="100">100</option>
+              </select>
+              <span style="position:absolute;right:6px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;font-size:10px">▾</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Export & Detect panel ─────────────────────────────────── -->
+      <div class="tab-panel" id="tab-export">
+        <div class="export-grid">
+          <!-- NDJSON -->
+          <div class="export-card">
+            <h3>📄 JSON Lines (NDJSON)</h3>
+            <p>Exports every record as a newline-delimited JSON object. Best for ML pipelines, data lakes, and streaming ingestion.</p>
+            <div class="export-options">
+              <label class="checkbox-row">
+                <input type="checkbox" id="ndjson-inc-corrupt">
+                Include corrupted records
+              </label>
+            </div>
+            <button class="btn-export" onclick="exportData('ndjson')">
+              ⬇ Download NDJSON
+            </button>
+          </div>
+          <!-- CSV -->
+          <div class="export-card">
+            <h3>📊 CSV (Spreadsheet)</h3>
+            <p>Exports records as comma-separated values with a header row. All structured <code>fields</code> are flattened into <code>field.key</code> columns.</p>
+            <div class="export-options">
+              <label class="checkbox-row">
+                <input type="checkbox" id="csv-inc-corrupt">
+                Include corrupted records
+              </label>
+            </div>
+            <button class="btn-export" onclick="exportData('csv')">
+              ⬇ Download CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Staging info -->
+        <div class="export-card" style="margin-bottom:14px">
+          <h3>🗃 Staging Area</h3>
+          <p style="margin-bottom:10px">All processed records are held in an in-memory staging area with deduplication. The area auto-spills to disk at 100,000 records. Resetting clears all data.</p>
+          <div id="staging-info" style="font-size:12px;color:var(--text3);margin-bottom:12px">—</div>
+          <button class="btn-danger" onclick="confirmClear()">⟳ Reset Staging Area</button>
+        </div>
+
+        <!-- Format detector -->
+        <div class="detect-card">
+          <h3>🔍 Format Detector</h3>
+          <p>Paste a sample of your log data below and the pipeline will identify its format using content heuristics.</p>
+          <textarea class="input-dark" id="detect-text" rows="6" placeholder="Paste log lines here…"></textarea>
+          <div class="gap-8 mt-10">
+            <button class="btn-primary" onclick="runDetect()" style="width:auto;padding:8px 16px">Detect Format</button>
+          </div>
+          <div class="detect-result" id="detect-result">
+            Detected format: <span id="detect-value"></span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- tab-content -->
+  </div><!-- main -->
+</div><!-- body -->
+</div><!-- app -->
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────
+const S = {
+  page: 1, perPage: 50, totalPages: 1, total: 0,
+  sort: { by: 'line_number', dir: 'asc' },
+  charts: {},
+  searchTimer: null,
+  formats: [],
+}
+
+// ─── API helper ───────────────────────────────────────────────────────
+async function api(method, url, body) {
+  const opts = { method }
+  if (body && !(body instanceof FormData)) {
+    opts.headers = { 'Content-Type': 'application/json' }
+    opts.body = JSON.stringify(body)
+  } else if (body instanceof FormData) {
+    opts.body = body
+  }
+  const res = await fetch(`${window.APP_BASE}${url}`, opts)
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }))
+    throw new Error(err.error || res.statusText)
+  }
+  return res.json()
+}
+
+// ─── Toast ────────────────────────────────────────────────────────────
+function toast(msg, type = 'info') {
+  const icons = { success:'✓', error:'✕', info:'ℹ', warning:'⚠' }
+  const el = document.createElement('div')
+  el.className = `toast ${type}`
+  el.innerHTML = `<span>${icons[type]||'ℹ'}</span><span>${msg}</span>`
+  document.getElementById('toast-container').appendChild(el)
+  setTimeout(() => {
+    el.style.animation = 'fadeOut .2s ease forwards'
+    setTimeout(() => el.remove(), 210)
+  }, 3200)
+}
+
+// ─── Status dot ───────────────────────────────────────────────────────
+function setStatus(active, text) {
+  document.getElementById('status-dot').classList.toggle('active', active)
+  document.getElementById('status-text').textContent = text
+}
+
+// ─── Format helpers ───────────────────────────────────────────────────
+function fmtSize(b) {
+  if (b < 1024) return b + ' B'
+  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB'
+  return (b/1024/1024).toFixed(1) + ' MB'
+}
+function levelBadge(lvl) {
+  if (!lvl) return '<span class="badge badge-null">—</span>'
+  return `<span class="badge badge-${lvl}">${lvl}</span>`
+}
+function fmtBadge(fmt) {
+  if (!fmt) return '<span class="badge badge-null">—</span>'
+  return `<span class="badge badge-format">${fmt}</span>`
+}
+function extColor(ext) {
+  const m = { json:'#34d399', csv:'#fbbf24', tsv:'#fbbf24', xml:'#a78bfa',
+              yaml:'#38bdf8', yml:'#38bdf8', log:'#5b8dee', bin:'#f87171',
+              txt:'#94aec8', syslog:'#fb923c', logfmt:'#e879f9' }
+  return m[ext] || '#64748b'
+}
+
+// ─── Formats ─────────────────────────────────────────────────────────
+async function loadFormats() {
+  try {
+    const d = await api('GET', '/api/formats')
+    S.formats = d.formats
+    const overrideSel = document.getElementById('format-override')
+    overrideSel.innerHTML = '<option value="">Auto-detect</option>' +
+      d.formats.map(f => `<option value="${f}">${f}</option>`).join('')
+    const fmtFilter = document.getElementById('format-filter')
+    fmtFilter.innerHTML = '<option value="">All formats</option>' +
+      d.formats.map(f => `<option value="${f}">${f}</option>`).join('')
+  } catch(e) {}
+}
+
+// ─── Files ────────────────────────────────────────────────────────────
+async function loadFiles() {
+  try {
+    const d = await api('GET', '/api/files')
+    const el = document.getElementById('file-list')
+    document.getElementById('file-count').textContent = d.files.length
+    if (!d.files.length) {
+      el.innerHTML = '<div class="empty-state"><div class="empty-icon">📁</div>No files yet</div>'
+      return
+    }
+    el.innerHTML = d.files.map(f => {
+      const c = extColor(f.ext)
+      return `<div class="file-item">
+        <div class="file-ext" style="background:${c}22;color:${c}">${(f.ext||'?').toUpperCase().slice(0,4)}</div>
+        <div class="file-info">
+          <div class="file-name" title="${f.name}">${f.name}</div>
+          <div class="file-size">${fmtSize(f.size)}</div>
+        </div>
+        <div class="file-actions">
+          <button class="icon-btn run" title="Process file" onclick="processFile('${f.name}')">▶</button>
+          <button class="icon-btn del" title="Delete file" onclick="deleteFile('${f.name}')">🗑</button>
+        </div>
+      </div>`
+    }).join('')
+  } catch(e) { toast('Failed to load files: ' + e.message, 'error') }
+}
+
+// ─── Upload ───────────────────────────────────────────────────────────
+async function uploadFiles(files) {
+  for (const file of files) {
+    const fd = new FormData()
+    fd.append('file', file)
+    try {
+      const d = await api('POST', '/api/upload', fd)
+      toast(`Uploaded "${d.filename}" — detected as ${d.detected_format}`, 'success')
+    } catch(e) { toast(`Upload failed: ${e.message}`, 'error') }
+  }
+  await loadFiles()
+}
+
+// File input
+document.getElementById('file-input').addEventListener('change', e => {
+  if (e.target.files.length) uploadFiles(e.target.files)
+  e.target.value = ''
+})
+
+// Drag & drop
+const dz = document.getElementById('drop-zone')
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over') })
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'))
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('drag-over')
+  if (e.dataTransfer.files.length) uploadFiles(e.dataTransfer.files)
+})
+
+// ─── Process single file ──────────────────────────────────────────────
+async function processFile(filename) {
+  const fmt = document.getElementById('format-override').value || null
+  setStatus(true, `Processing ${filename}…`)
+  try {
+    const d = await api('POST', '/api/process', { filename, format_override: fmt })
+    toast(`"${d.source}" → ${d.detected_format}: ${d.clean_records} clean, ${d.corrupted_records} corrupted (${d.duration_ms}ms)`, 'success')
+    await Promise.all([loadStats(), loadHistory()])
+    document.getElementById('records-badge').textContent = await getTotalRecords()
+    setStatus(true, 'Done')
+  } catch(e) { toast(`Error: ${e.message}`, 'error'); setStatus(false, 'Error') }
+  setTimeout(() => setStatus(false, 'Ready'), 3000)
+}
+
+// ─── Process all ──────────────────────────────────────────────────────
+async function processAll() {
+  const btn = document.getElementById('process-all-btn')
+  btn.innerHTML = '<div class="spinner"></div> Processing…'
+  btn.disabled = true
+  setStatus(true, 'Processing all files…')
+  try {
+    const d = await api('POST', '/api/process/all')
+    const total = d.results.reduce((s, r) => s + r.total_records, 0)
+    const clean = d.results.reduce((s, r) => s + r.clean_records, 0)
+    toast(`Processed ${d.results.length} files — ${clean.toLocaleString()} clean records`, 'success')
+    if (d.errors.length) d.errors.forEach(e => toast(`${e.filename}: ${e.error}`, 'error'))
+    await Promise.all([loadStats(), loadHistory()])
+    document.getElementById('records-badge').textContent = await getTotalRecords()
+  } catch(e) { toast('Processing failed: ' + e.message, 'error') }
+  btn.innerHTML = '▶ Process All'
+  btn.disabled = false
+  setStatus(false, 'Ready')
+}
+
+async function getTotalRecords() {
+  try { const d = await api('GET', '/api/stats'); return d.total_records || 0 } catch(e) { return 0 }
+}
+
+// ─── Delete file ──────────────────────────────────────────────────────
+async function deleteFile(filename) {
+  if (!confirm(`Delete "${filename}"?`)) return
+  try {
+    await api('DELETE', `/api/files/${encodeURIComponent(filename)}`)
+    toast(`Deleted "${filename}"`, 'info')
+    await loadFiles()
+  } catch(e) { toast(e.message, 'error') }
+}
+
+// ─── Stats & Charts ───────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const d = await api('GET', '/api/stats')
+    document.getElementById('stat-total').textContent = (d.total_records||0).toLocaleString()
+    document.getElementById('stat-clean').textContent = (d.clean_records||0).toLocaleString()
+    document.getElementById('stat-corrupt').textContent = (d.corrupted_records||0).toLocaleString()
+    document.getElementById('stat-dup').textContent = (d.duplicates_skipped||0).toLocaleString() + ' duplicates skipped'
+    const total = d.total_records || 1
+    const cleanPct = ((d.clean_records||0)/total*100).toFixed(1)
+    const corruptPct = ((d.corrupted_records||0)/total*100).toFixed(1)
+    document.getElementById('stat-clean-pct').textContent = cleanPct + '% success rate'
+    document.getElementById('stat-corrupt-pct').textContent = corruptPct + '% error rate'
+    const fmts = Object.keys(d.format_distribution || {})
+    document.getElementById('stat-formats').textContent = fmts.length
+    document.getElementById('stat-formats-list').textContent = fmts.slice(0,3).join(', ') + (fmts.length>3?'…':'')
+
+    // Staging info
+    const be = d.backend || 'memory'
+    document.getElementById('staging-info').innerHTML =
+      `Backend: <strong>${be}</strong> &nbsp;|&nbsp; ` +
+      `Total: <strong>${(d.total_records||0).toLocaleString()}</strong> &nbsp;|&nbsp; ` +
+      `Clean: <strong>${(d.clean_records||0).toLocaleString()}</strong> &nbsp;|&nbsp; ` +
+      `Corrupted: <strong>${(d.corrupted_records||0).toLocaleString()}</strong>`
+
+    renderCharts(d)
+    // Level filter options
+    const lvls = Object.keys(d.level_distribution || {})
+    const lvlSel = document.getElementById('level-filter')
+    const curLvl = lvlSel.value
+    lvlSel.innerHTML = '<option value="">All levels</option>' +
+      lvls.map(l => `<option value="${l}" ${l===curLvl?'selected':''}>${l}</option>`).join('')
+  } catch(e) {}
+}
+
+function renderCharts(d) {
+  const CHART_DEFAULTS = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#94aec8', boxWidth: 12, padding: 12, font: { size: 11 } } } }
+  }
+
+  // Level chart (doughnut)
+  const lvlData = d.level_distribution || {}
+  const lvlLabels = Object.keys(lvlData)
+  const lvlColors = lvlLabels.map(l => ({
+    DEBUG:'#5a7a96', TRACE:'#a78bfa', INFO:'#38bdf8', NOTICE:'#34d399',
+    WARN:'#fbbf24', WARNING:'#fbbf24', ERROR:'#f87171', CRITICAL:'#fc8181', FATAL:'#fc8181'
+  }[l] || '#64748b'))
+
+  if (S.charts.level) S.charts.level.destroy()
+  const lctx = document.getElementById('level-chart').getContext('2d')
+  S.charts.level = new Chart(lctx, {
+    type: 'doughnut',
+    data: { labels: lvlLabels, datasets: [{ data: Object.values(lvlData), backgroundColor: lvlColors, borderWidth: 0, hoverOffset: 4 }] },
+    options: { ...CHART_DEFAULTS, cutout: '65%' }
+  })
+
+  // Format chart (bar)
+  const fmtData = d.format_distribution || {}
+  const fmtEntries = Object.entries(fmtData).sort((a,b) => b[1]-a[1])
+  if (S.charts.format) S.charts.format.destroy()
+  const fctx = document.getElementById('format-chart').getContext('2d')
+  S.charts.format = new Chart(fctx, {
+    type: 'bar',
+    data: {
+      labels: fmtEntries.map(e=>e[0]),
+      datasets: [{ data: fmtEntries.map(e=>e[1]), backgroundColor: '#5b8dee88', borderColor: '#5b8dee', borderWidth: 1, borderRadius: 4 }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#5a7a96', font: { size: 10 } }, grid: { color: '#1e3045' } },
+        y: { ticks: { color: '#5a7a96', font: { size: 10 } }, grid: { color: '#1e3045' } }
+      }
+    }
+  })
+
+  // Corruption chart (bar)
+  const corData = d.corruption_reasons || {}
+  const corEntries = Object.entries(corData).sort((a,b) => b[1]-a[1])
+  if (S.charts.corrupt) S.charts.corrupt.destroy()
+  const cctx = document.getElementById('corrupt-chart').getContext('2d')
+  if (corEntries.length) {
+    S.charts.corrupt = new Chart(cctx, {
+      type: 'bar',
+      data: {
+        labels: corEntries.map(e=>e[0]),
+        datasets: [{ data: corEntries.map(e=>e[1]), backgroundColor: '#f8717166', borderColor: '#f87171', borderWidth: 1, borderRadius: 4 }]
+      },
+      options: {
+        ...CHART_DEFAULTS, indexAxis: 'y',
+        plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#5a7a96', font: { size: 10 } }, grid: { color: '#1e3045' } },
+          y: { ticks: { color: '#94aec8', font: { size: 11 } }, grid: { color: '#1e3045' } }
+        }
+      }
+    })
+  }
+}
+
+// ─── History ──────────────────────────────────────────────────────────
+async function loadHistory() {
+  try {
+    const d = await api('GET', '/api/history')
+    const tbody = document.getElementById('history-tbody')
+    document.getElementById('history-count').textContent = d.history.length
+    if (!d.history.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="empty-icon">⏳</div>No files processed yet</td></tr>'
+      return
+    }
+    tbody.innerHTML = d.history.slice().reverse().map(r => {
+      const pct = r.success_rate
+      const color = pct >= 90 ? 'var(--green)' : pct >= 70 ? 'var(--amber)' : 'var(--red)'
+      return `<tr>
+        <td class="primary">${r.source}</td>
+        <td>${fmtBadge(r.detected_format)}</td>
+        <td>${(r.total_records||0).toLocaleString()}</td>
+        <td style="color:var(--green)">${(r.clean_records||0).toLocaleString()}</td>
+        <td style="color:var(--red)">${(r.corrupted_records||0).toLocaleString()}</td>
+        <td><span style="color:${color};font-weight:600">${pct}%</span></td>
+        <td style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:11px">${r.duration_ms}ms</td>
+      </tr>`
+    }).join('')
+  } catch(e) {}
+}
+
+// ─── Records ──────────────────────────────────────────────────────────
+async function loadRecords(page) {
+  if (page !== undefined) S.page = page
+  const search  = document.getElementById('search-input').value
+  const level   = document.getElementById('level-filter').value
+  const format  = document.getElementById('format-filter').value
+  const corrupt = document.getElementById('corrupt-filter').value
+  const params  = new URLSearchParams({
+    page: S.page, per_page: S.perPage,
+    sort_by: S.sort.by, sort_dir: S.sort.dir,
+    ...(search  && { search }),
+    ...(level   && { level }),
+    ...(format  && { format }),
+    ...(corrupt && corrupt !== 'all' && { corrupted: corrupt }),
+  })
+  try {
+    const d = await api('GET', `/api/records?${params}`)
+    S.totalPages = d.total_pages
+    S.total = d.total
+    renderRecords(d)
+  } catch(e) { toast('Failed to load records: ' + e.message, 'error') }
+}
+
+function renderRecords(d) {
+  const tbody = document.getElementById('records-tbody')
+  document.getElementById('record-count-label').textContent =
+    d.total.toLocaleString() + ' record' + (d.total !== 1 ? 's' : '')
+  document.getElementById('records-badge').textContent = d.total
+
+  if (!d.records.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="empty-icon">📄</div>No matching records</td></tr>'
+    renderPagination(d)
+    return
+  }
+
+  const offset = (d.page - 1) * d.per_page
+  tbody.innerHTML = d.records.map((r, i) => {
+    const ts = r.timestamp ? r.timestamp.replace('T',' ').replace(/\.\d+Z$/,'') : '—'
+    const msg = (r.message || r.raw || '').slice(0, 80)
+    const rowStyle = r.corrupted ? 'background:rgba(248,113,113,.04)' : ''
+    return `<tr style="${rowStyle}" onclick="showRecord(${JSON.stringify(JSON.stringify(r)).slice(1,-1)})" style="cursor:pointer">
+      <td style="color:var(--text3);font-size:11px">${offset+i+1}</td>
+      <td class="ts-cell">${ts}</td>
+      <td>${r.corrupted ? '<span class="badge badge-corrupt">CORRUPT</span>' : levelBadge(r.level)}</td>
+      <td>${fmtBadge(r.format)}</td>
+      <td class="msg-cell" title="${(r.message||'').replace(/"/g,'&quot;')}">${escHtml(msg)}</td>
+      <td style="font-size:11px;color:var(--text3)">${r.source||'—'}</td>
+      <td><button class="view-btn" onclick="event.stopPropagation();showRecord(${JSON.stringify(JSON.stringify(r)).slice(1,-1)})">View</button></td>
+    </tr>`
+  }).join('')
+  renderPagination(d)
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
+function renderPagination(d) {
+  document.getElementById('pg-info').textContent =
+    `Page ${d.page} of ${d.total_pages} (${d.total.toLocaleString()} total)`
+  const btns = document.getElementById('pg-btns')
+  const pages = paginationRange(d.page, d.total_pages)
+  btns.innerHTML = [
+    `<button class="pg-btn" onclick="loadRecords(${d.page-1})" ${d.page<=1?'disabled':''}>‹</button>`,
+    ...pages.map(p => p === '…'
+      ? `<span class="pg-btn" style="cursor:default;border:none">…</span>`
+      : `<button class="pg-btn ${p===d.page?'current':''}" onclick="loadRecords(${p})">${p}</button>`
+    ),
+    `<button class="pg-btn" onclick="loadRecords(${d.page+1})" ${d.page>=d.total_pages?'disabled':''}>›</button>`
+  ].join('')
+}
+
+function paginationRange(cur, total) {
+  if (total <= 7) return Array.from({length:total}, (_,i)=>i+1)
+  if (cur <= 4) return [1,2,3,4,5,'…',total]
+  if (cur >= total-3) return [1,'…',total-4,total-3,total-2,total-1,total]
+  return [1,'…',cur-1,cur,cur+1,'…',total]
+}
+
+function changePerPage(v) { S.perPage = +v; loadRecords(1) }
+
+function sortBy(field) {
+  S.sort.dir = S.sort.by === field && S.sort.dir === 'asc' ? 'desc' : 'asc'
+  S.sort.by = field
+  loadRecords(1)
+}
+
+let _searchTimer = null
+function debounceSearch() {
+  clearTimeout(_searchTimer)
+  _searchTimer = setTimeout(() => loadRecords(1), 350)
+}
+
+// ─── Record detail panel ──────────────────────────────────────────────
+function showRecord(jsonStr) {
+  const r = typeof jsonStr === 'string' ? JSON.parse(jsonStr) : jsonStr
+  const panel = document.getElementById('detail-panel')
+  const body  = document.getElementById('detail-body')
+  const overlay = document.getElementById('detail-overlay')
+
+  const rows = [
+    ['Record ID',  `<span style="font-size:11px">${r.record_id||'—'}</span>`],
+    ['Source',     escHtml(r.source||'—')],
+    ['Line #',     r.line_number||'—'],
+    ['Format',     fmtBadge(r.format)],
+    ['Timestamp',  r.timestamp ? `<span style="color:var(--sky)">${r.timestamp}</span>` : '—'],
+    ['Level',      r.corrupted ? '<span class="badge badge-corrupt">CORRUPT</span>' : levelBadge(r.level)],
+    ['Status',     r.corrupted
+      ? `<span style="color:var(--red)">✕ Corrupted — ${escHtml(r.corruption_reason||'')}</span>`
+      : '<span style="color:var(--green)">✓ Clean</span>'],
+    ['Message',    `<span style="white-space:pre-wrap">${escHtml(r.message||'—')}</span>`],
+  ]
+
+  let fieldsHtml = ''
+  const fields = r.fields || {}
+  const keys = Object.keys(fields)
+  if (keys.length) {
+    fieldsHtml = `<div class="detail-row">
+      <span class="detail-key">Fields</span>
+      <div class="detail-fields">${
+        keys.map(k => `<div class="field-kv"><span class="field-k">${escHtml(k)}</span><span style="color:var(--text3)"> = </span><span class="field-v">${escHtml(String(fields[k]))}</span></div>`).join('')
+      }</div>
+    </div>`
+  }
+
+  body.innerHTML = rows.map(([k,v]) =>
+    `<div class="detail-row"><span class="detail-key">${k}</span><span class="detail-val">${v}</span></div>`
+  ).join('') + fieldsHtml + (r.raw
+    ? `<div style="margin-top:10px"><div class="sidebar-label" style="margin-bottom:6px">Raw</div><div class="detail-raw">${escHtml(r.raw)}</div></div>`
+    : '')
+
+  panel.classList.add('open')
+  overlay.classList.add('open')
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open')
+  document.getElementById('detail-overlay').classList.remove('open')
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail() })
+
+// ─── Export ───────────────────────────────────────────────────────────
+function exportData(format) {
+  const incCorrupt = document.getElementById(`${format}-inc-corrupt`).checked
+  window.location.href = `${window.APP_BASE}/api/export/${format}?include_corrupted=${incCorrupt}`
+}
+
+// ─── Detect format ────────────────────────────────────────────────────
+async function runDetect() {
+  const text = document.getElementById('detect-text').value.trim()
+  if (!text) { toast('Paste some log text first', 'warning'); return }
+  try {
+    const d = await api('POST', '/api/detect', { text })
+    document.getElementById('detect-value').textContent = d.detected_format
+    document.getElementById('detect-result').style.display = 'block'
+  } catch(e) { toast('Detection failed: ' + e.message, 'error') }
+}
+
+// ─── Clear staging ────────────────────────────────────────────────────
+async function confirmClear() {
+  if (!confirm('Reset the staging area? All processed records will be cleared.')) return
+  try {
+    await api('DELETE', '/api/staging')
+    toast('Staging area cleared', 'info')
+    await Promise.all([loadStats(), loadHistory()])
+    document.getElementById('records-badge').textContent = '0'
+    document.getElementById('record-count-label').textContent = ''
+    document.getElementById('records-tbody').innerHTML =
+      '<tr><td colspan="7" class="empty-state"><div class="empty-icon">📄</div>Process files to see records</td></tr>'
+    document.getElementById('pg-info').textContent = ''
+    document.getElementById('pg-btns').innerHTML = ''
+  } catch(e) { toast(e.message, 'error') }
+}
+
+// ─── Tabs ─────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name))
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${name}`))
+  if (name === 'records') loadRecords(S.page)
+  if (name === 'dashboard') loadStats()
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────
+async function init() {
+  await Promise.all([loadFormats(), loadFiles(), loadStats(), loadHistory()])
+  document.getElementById('records-badge').textContent = await getTotalRecords()
+}
+
+init()
+</script>
+</body>
+</html>

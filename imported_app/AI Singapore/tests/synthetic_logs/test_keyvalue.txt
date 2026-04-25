@@ -1,0 +1,50 @@
+tool=ETCH01 alarm=E334 temp=72C pressure=0.9Pa wafer_id=WFR_001 timestamp=2024-04-15T12:03:20
+tool=CVD02 recipe=RCP_0042 step=DEPOSIT rf_power=150W chamber=C1 ts=2024-04-15T12:05:00
+tool=PVD03 temp_c=250.0 voltage=350V current=8.5A status=DEPOSITION datetime=2024-04-15T12:05:30
+tool=ETCH01 fault=E335 level=WARNING wfr=WFR_002 lot=LOT_20240415 time=2024-04-15T12:06:00
+tool=CVD02 Temperature=421.5 Pressure=1.21 rf_power=151W step=DEPOSIT ts=2024-04-15T12:06:30
+tool=PVD03 alarm=A119 severity=WARNING lot=LOT_20240415 timestamp=2024-04-15T12:07:00
+tool=ETCH01 temp=88C pres_pa=8900 status=PROCESSING wafer_id=WFR_003 ts=2024-04-15T12:07:30
+tool=CVD02 recipe=RCP_0043 step=PURGE chamber=C2 status=RUNNING timestamp=2024-04-15T12:08:00
+tool=PVD03 tmp=255.0 volt=355V amp=8.8A state=DEPOSITION ts=2024-04-15T12:08:30
+tool=ETCH01 ALARM=E336 SEVERITY=INFO WAFER=WFR_004 LOT=LOT_20240415 ts=2024-04-15T12:09:00
+TOOL=CVD02 TEMP=420.0 PRESS=1.20 RF=152W STEP=DEPOSIT TIME=2024-04-15T12:09:30
+tool=PVD03 temp_c=258.0 voltage=358V current=9.0A status=DEPOSITION time=2024-04-15T12:10:00
+tool=ETCH01 alarm=E337 level=CRITICAL wfr=WFR_005 timestamp=2024-04-15T12:10:30
+tool=CVD02 rcp=RCP_0044 step=CLEAN chamber=C1 ts=2024-04-15T12:11:00
+tool=PVD03 fault=A120 severity=CRITICAL lot=LOT_20240415 timestamp=2024-04-15T12:11:30
+tool=ETCH01 temp=90C pressure=0.85Pa status=PROCESSING wafer_id=WFR_006 ts=2024-04-15T12:12:00
+tool=CVD02 Temperature=422.0 Pressure=1.22 rf=150W step=DEPOSIT ts=2024-04-15T12:12:30
+tool=PVD03 tmp=260.0 volt=360V amp=9.1A state=DEPOSITION timestamp=2024-04-15T12:13:00
+tool=ETCH01 fault=E338 level=WARNING wfr=WFR_007 lot=LOT_20240416 ts=2024-04-15T12:13:30
+tool=CVD02 recipe=RCP_0042 step=DEPOSIT chamber=C2 status=RUNNING timestamp=2024-04-15T12:14:00
+tool=PVD03 temp_c=262.0 voltage=362V current=9.2A status=IDLE time=2024-04-15T12:14:30
+tool=ETCH01 TEMP=92C PRES=0.83Pa STATUS=PROCESSING WAFER=WFR_008 ts=2024-04-15T12:15:00
+tool=CVD02 ALARM=E004 SEVERITY=WARNING STEP=PURGE CHAMBER=C1 ts=2024-04-15T12:15:30
+tool=PVD03 alarm=A121 severity=INFO lot=LOT_20240416 ts=2024-04-15T12:16:00
+tool=ETCH01 temp=93C pressure=0.82Pa status=PROCESSING wafer_id=WFR_009 timestamp=2024-04-15T12:16:30
+tool=CVD02 rcp=RCP_0045 proc_step=DEPOSIT chamber=C2 ts=2024-04-15T12:17:00
+tool=PVD03 tmp=264.0 voltage=364V current=9.3A status=DEPOSITION timestamp=2024-04-15T12:17:30
+tool=ETCH01 alarm=E339 level=INFO wafer_id=WFR_010 lot=LOT_20240416 ts=2024-04-15T12:18:00
+tool=CVD02 Temperature=423.0 Pressure=1.23 rf_power=153W step=DEPOSIT ts=2024-04-15T12:18:30
+tool=PVD03 fault=A122 severity=CRITICAL lot=LOT_20240416 wafer_id=WFR_011 ts=2024-04-15T12:19:00
+tool=ETCH01 temp=94C pres_pa=8200 status=PROCESSING wfr=WFR_011 ts=2024-04-15T12:19:30
+tool=CVD02 recipe=RCP_0046 step=COOL_DOWN chamber=C1 status=STOPPING ts=2024-04-15T12:20:00
+tool=PVD03 temp_c=266.0 volt=366V amp=9.4A status=DEPOSITION timestamp=2024-04-15T12:20:30
+tool=ETCH01 ALARM=E340 SEVERITY=WARNING WAFER=WFR_012 ts=2024-04-15T12:21:00
+tool=CVD02 TEMP=424.0 PRESSURE=1.24 RF=154W STEP=DEPOSIT timestamp=2024-04-15T12:21:30
+tool=PVD03 tmp=268.0 voltage=368V current=9.5A state=DEPOSITION ts=2024-04-15T12:22:00
+tool=ETCH01 temp=95C pressure=0.80Pa status=PROCESSING wafer_id=WFR_013 ts=2024-04-15T12:22:30
+tool=CVD02 rcp=RCP_0042 step=DEPOSIT chamber=C2 ts=2024-04-15T12:23:00
+tool=PVD03 alarm=A123 severity=WARNING chamber=C1 lot=LOT_20240416 ts=2024-04-15T12:23:30
+tool=ETCH01 fault=E341 level=CRITICAL wfr=WFR_014 ts=2024-04-15T12:24:00
+tool=CVD02 Temperature=425.0 Pressure=1.25 rf_power=155W step=DEPOSIT ts=2024-04-15T12:24:30
+tool=PVD03 temp_c=270.0 voltage=370V current=9.6A status=DEPOSITION ts=2024-04-15T12:25:00
+tool=ETCH01 temp=96C pres=0.79Pa status=PROCESSING wafer_id=WFR_015 timestamp=2024-04-15T12:25:30
+tool=CVD02 ALARM=E005 SEVERITY=INFO STEP=CLEAN CHAMBER=C2 ts=2024-04-15T12:26:00
+tool=PVD03 alarm=A124 severity=INFO lot=LOT_20240416 timestamp=2024-04-15T12:26:30
+tool=ETCH01 temp=97C pressure=0.78Pa status=IDLE wafer_id=WFR_015 ts=2024-04-15T12:27:00
+tool=CVD02 recipe=RCP_0043 step=PURGE chamber=C1 status=RUNNING ts=2024-04-15T12:27:30
+tool=PVD03 tmp=272.0 volt=372V amp=9.7A state=DEPOSITION timestamp=2024-04-15T12:28:00
+tool=ETCH01 ALARM=E342 SEVERITY=WARNING WAFER=WFR_016 ts=2024-04-15T12:28:30
+tool=CVD02 Temperature=426.0 Pressure=1.26 rf=156W step=DEPOSIT ts=2024-04-15T12:29:00

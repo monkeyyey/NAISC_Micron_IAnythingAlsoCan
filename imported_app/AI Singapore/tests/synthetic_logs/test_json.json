@@ -1,0 +1,50 @@
+{"ts": "2024-04-15T12:03:20", "tool": "ETCH01", "temp_c": 85.2, "pres_pa": 900, "fault": "E334", "wafer_id": "WFR_001", "lot": "LOT_20240415"}
+{"ts": "2024-04-15T12:05:00", "tool": "CVD02", "Temperature": 420.5, "Pressure": 1100, "rf_power": 150, "AlarmCode": null, "recipe": "RCP_0042", "step": "DEPOSIT"}
+{"ts": "2024-04-15T12:05:30", "tool": "PVD03", "tmp": 250.0, "volt": 350, "amp": 8.5, "status": "DEPOSITION", "wafer_id": "WFR_003"}
+{"ts": "2024-04-15T12:06:00", "tool": "ETCH01", "alarm": "E335", "severity": "WARNING", "wfr": "WFR_002", "lot": "LOT_20240415", "temp_c": 88.1}
+{"ts": "2024-04-15T12:06:30", "tool": "CVD02", "temp_c": 421.5, "pressure_pa": 1210, "rf_power": 151, "step": "DEPOSIT", "chamber": "C2"}
+{"ts": "2024-04-15T12:07:00", "tool": "PVD03", "alarm": "A119", "level": "WARNING", "lot": "LOT_20240415", "temp_c": 252.0}
+{"ts": "2024-04-15T12:07:30", "tool": "ETCH01", "temp_c": 88.0, "pres_pa": 8800, "status": "PROCESSING", "wafer_id": "WFR_003"}
+{"ts": "2024-04-15T12:08:00", "tool": "CVD02", "recipe": "RCP_0043", "step": "PURGE", "chamber": "C1", "status": "RUNNING", "Temperature": 419.0}
+{"ts": "2024-04-15T12:08:30", "tool": "PVD03", "tmp": 255.0, "voltage": 355, "current": 8.8, "state": "DEPOSITION", "wafer_id": "WFR_007"}
+{"ts": "2024-04-15T12:09:00", "tool": "ETCH01", "fault": "E336", "severity": "INFO", "wafer_id": "WFR_004", "lot": "LOT_20240415"}
+{"ts": "2024-04-15T12:09:30", "tool": "CVD02", "Temperature": 420.0, "Pressure": 1200, "rf_power": 152, "step": "DEPOSIT", "chamber": "C2"}
+{"ts": "2024-04-15T12:10:00", "tool": "PVD03", "temp_c": 258.0, "voltage": 358, "current": 9.0, "status": "DEPOSITION", "wafer_id": "WFR_009"}
+{"ts": "2024-04-15T12:10:30", "tool": "ETCH01", "alarm": "E337", "level": "CRITICAL", "wfr": "WFR_005", "lot": "LOT_20240415"}
+{"ts": "2024-04-15T12:11:00", "tool": "CVD02", "rcp": "RCP_0044", "step": "CLEAN", "chamber": "C1", "status": "RUNNING", "Temperature": 422.0}
+{"ts": "2024-04-15T12:11:30", "tool": "PVD03", "alarm": "A120", "severity": "CRITICAL", "lot": "LOT_20240415", "temp_c": 260.0}
+{"ts": "2024-04-15T12:12:00", "tool": "ETCH01", "temp_c": 90.0, "pres_pa": 8500, "status": "PROCESSING", "wafer_id": "WFR_006"}
+{"ts": "2024-04-15T12:12:30", "tool": "CVD02", "Temperature": 422.0, "Pressure": 1220, "rf_power": 150, "step": "DEPOSIT", "chamber": "C2"}
+{"ts": "2024-04-15T12:13:00", "tool": "PVD03", "tmp": 262.0, "volt": 362, "amp": 9.2, "status": "DEPOSITION", "wafer_id": "WFR_013"}
+{"ts": "2024-04-15T12:13:30", "tool": "ETCH01", "fault": "E338", "level": "WARNING", "wfr": "WFR_007", "lot": "LOT_20240416"}
+{"ts": "2024-04-15T12:14:00", "tool": "CVD02", "recipe": "RCP_0042", "step": "DEPOSIT", "chamber": "C2", "status": "RUNNING", "Temperature": 423.0}
+{"ts": "2024-04-15T12:14:30", "tool": "PVD03", "temp_c": 264.0, "voltage": 364, "current": 9.3, "status": "IDLE", "wafer_id": "WFR_015"}
+{"ts": "2024-04-15T12:15:00", "tool": "ETCH01", "temp_c": 92.0, "pres_pa": 8300, "status": "PROCESSING", "wafer_id": "WFR_008"}
+{"ts": "2024-04-15T12:15:30", "tool": "CVD02", "alarm": "E004", "severity": "WARNING", "step": "PURGE", "chamber": "C1"}
+{"ts": "2024-04-15T12:16:00", "tool": "PVD03", "alarm": "A121", "level": "INFO", "lot": "LOT_20240416", "temp_c": 266.0}
+{"ts": "2024-04-15T12:16:30", "tool": "ETCH01", "fault": "E339", "level": "INFO", "wafer_id": "WFR_009", "lot": "LOT_20240416"}
+{"ts": "2024-04-15T12:17:00", "tool": "CVD02", "Temperature": 424.0, "Pressure": 1250, "rf_power": 155, "step": "DEPOSIT", "chamber": "C1"}
+{"ts": "2024-04-15T12:17:30", "tool": "PVD03", "tmp": 268.0, "voltage": 368, "current": 9.5, "state": "DEPOSITION", "wafer_id": "WFR_019"}
+{"ts": "2024-04-15T12:18:00", "tool": "ETCH01", "alarm": "E340", "severity": "WARNING", "wfr": "WFR_010", "lot": "LOT_20240416"}
+{"ts": "2024-04-15T12:18:30", "tool": "CVD02", "recipe": "RCP_0046", "step": "DEPOSIT", "chamber": "C2", "status": "RUNNING", "Temperature": 425.0}
+{"ts": "2024-04-15T12:19:00", "tool": "PVD03", "alarm": "A122", "level": "CRITICAL", "lot": "LOT_20240416", "temp_c": 270.0}
+{"ts": "2024-04-15T12:19:30", "tool": "ETCH01", "temp_c": 94.0, "pres_pa": 8200, "status": "PROCESSING", "wafer_id": "WFR_011"}
+{"ts": "2024-04-15T12:20:00", "tool": "CVD02", "Temperature": 424.0, "Pressure": 1230, "rf_power": 152, "step": "COOL_DOWN", "chamber": "C1"}
+{"ts": "2024-04-15T12:20:30", "tool": "PVD03", "tmp": 272.0, "volt": 372, "amp": 9.7, "status": "DEPOSITION", "wafer_id": "WFR_023"}
+{"ts": "2024-04-15T12:21:00", "tool": "ETCH01", "fault": "E341", "level": "CRITICAL", "wfr": "WFR_012", "lot": "LOT_20240416"}
+{"ts": "2024-04-15T12:21:30", "tool": "CVD02", "recipe": "RCP_0047", "step": "DEPOSIT", "chamber": "C2", "status": "RUNNING", "Temperature": 426.0}
+{"ts": "2024-04-15T12:22:00", "tool": "PVD03", "temp_c": 274.0, "voltage": 374, "current": 9.8, "status": "DEPOSITION", "wafer_id": "WFR_025"}
+{"ts": "2024-04-15T12:22:30", "tool": "ETCH01", "alarm": "E342", "severity": "WARNING", "wafer_id": "WFR_013", "lot": "LOT_20240416"}
+{"ts": "2024-04-15T12:23:00", "tool": "CVD02", "Temperature": 425.0, "Pressure": 1240, "rf_power": 153, "step": "DEPOSIT", "chamber": "C1"}
+{"ts": "2024-04-15T12:23:30", "tool": "PVD03", "alarm": "A123", "level": "WARNING", "chamber": "C1", "lot": "LOT_20240416"}
+{"ts": "2024-04-15T12:24:00", "tool": "ETCH01", "temp_c": 96.0, "pres_pa": 8000, "status": "PROCESSING", "wafer_id": "WFR_014"}
+{"ts": "2024-04-15T12:24:30", "tool": "CVD02", "recipe": "RCP_0048", "step": "DEPOSIT", "chamber": "C2", "status": "RUNNING", "Temperature": 427.0}
+{"ts": "2024-04-15T12:25:00", "tool": "PVD03", "tmp": 276.0, "voltage": 376, "current": 9.9, "state": "DEPOSITION", "wafer_id": "WFR_029"}
+{"ts": "2024-04-15T12:25:30", "tool": "ETCH01", "alarm": "E343", "severity": "INFO", "wfr": "WFR_015", "lot": "LOT_20240416"}
+{"ts": "2024-04-15T12:26:00", "tool": "CVD02", "alarm": "E005", "level": "INFO", "step": "CLEAN", "chamber": "C1"}
+{"ts": "2024-04-15T12:26:30", "tool": "PVD03", "temp_c": 278.0, "voltage": 378, "current": 10.0, "status": "DEPOSITION", "wafer_id": "WFR_031"}
+{"ts": "2024-04-15T12:27:00", "tool": "ETCH01", "fault": "E344", "level": "CRITICAL", "wafer_id": "WFR_016", "lot": "LOT_20240416"}
+{"ts": "2024-04-15T12:27:30", "tool": "CVD02", "Temperature": 428.0, "Pressure": 1280, "rf_power": 159, "step": "DEPOSIT", "chamber": "C2"}
+{"ts": "2024-04-15T12:28:00", "tool": "PVD03", "tmp": 280.0, "volt": 380, "amp": 10.1, "status": "DEPOSITION", "wafer_id": "WFR_033"}
+{"ts": "2024-04-15T12:28:30", "tool": "ETCH01", "alarm": "E345", "severity": "WARNING", "wafer_id": "WFR_017", "lot": "LOT_20240416"}
+{"ts": "2024-04-15T12:29:00", "tool": "CVD02", "recipe": "RCP_0050", "step": "DEPOSIT", "chamber": "C1", "status": "RUNNING", "Temperature": 429.0}

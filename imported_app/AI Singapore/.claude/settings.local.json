@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py --version)",
+      "Bash(py -3 --version)",
+      "Read(//c/Users/misak/AppData/Local/Programs/Python//**)",
+      "Read(//c/Users/misak/AppData/Local/**)",
+      "Bash(py -m py_compile config.py database/connection.py database/models.py database/writer.py signature/generator.py caching/registry.py caching/hash_table.py caching/trie.py parsing/format_router.py parsing/structured_parser.py parsing/unstructured_parser.py parsing/syslog_parser.py parsing/regex_engine.py partitioning/iterative_partitioner.py clustering/vectoriser.py clustering/dbscan.py clustering/candidate_pool.py llm/prompt_builder.py llm/response_parser.py llm/client.py normalisation/unit_normaliser.py normalisation/cleaner.py anomaly/detector.py ingestion/batch.py ingestion/stream.py main.py tests/test_pipeline.py)",
+      "Bash(py -m pytest tests/test_pipeline.py -v --ignore-glob=\"*integration*\" -k \"not Integration\")",
+      "Bash(py -m pip install pytest scikit-learn scipy numpy PyYAML lxml joblib python-dateutil anthropic flask)",
+      "Bash(py -m pytest tests/test_pipeline.py -v -k \"not Integration\")"
+    ]
+  }
+}

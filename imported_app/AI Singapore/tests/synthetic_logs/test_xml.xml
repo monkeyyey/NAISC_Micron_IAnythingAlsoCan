@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Logs>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:03:20</Timestamp>
+    <Tool id="ETCH01"/>
+    <Temperature unit="C">85.2</Temperature>
+    <Pressure unit="Pa">900</Pressure>
+    <Alarm code="E334" severity="CRITICAL"/>
+    <Wafer id="WFR_001"/>
+    <Lot id="LOT_20240415"/>
+    <Status>PROCESSING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:05:00</Timestamp>
+    <Tool id="CVD02"/>
+    <Temperature unit="C">420.5</Temperature>
+    <Pressure unit="Pa">1100</Pressure>
+    <RFPower unit="W">150</RFPower>
+    <Recipe name="RCP_0042"/>
+    <ProcessStep>DEPOSIT</ProcessStep>
+    <Chamber id="C1"/>
+    <Status>RUNNING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:05:30</Timestamp>
+    <Tool id="PVD03"/>
+    <Temperature unit="C">250.0</Temperature>
+    <Voltage unit="V">350</Voltage>
+    <Current unit="A">8.5</Current>
+    <Wafer id="WFR_003"/>
+    <Status>DEPOSITION</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:06:00</Timestamp>
+    <Tool id="ETCH01"/>
+    <Temperature unit="C">88.1</Temperature>
+    <Alarm code="E335" severity="WARNING"/>
+    <Wafer id="WFR_002"/>
+    <Lot id="LOT_20240415"/>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:06:30</Timestamp>
+    <Tool id="CVD02"/>
+    <Temperature unit="C">421.5</Temperature>
+    <Pressure unit="Pa">1210</Pressure>
+    <RFPower unit="W">151</RFPower>
+    <ProcessStep>DEPOSIT</ProcessStep>
+    <Chamber id="C2"/>
+    <Status>RUNNING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:07:00</Timestamp>
+    <Tool id="PVD03"/>
+    <Alarm code="A119" severity="WARNING"/>
+    <Temperature unit="C">252.0</Temperature>
+    <Lot id="LOT_20240415"/>
+    <Status>DEPOSITION</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:07:30</Timestamp>
+    <Tool id="ETCH01"/>
+    <Temperature unit="C">88.0</Temperature>
+    <Pressure unit="Pa">8800</Pressure>
+    <Wafer id="WFR_003"/>
+    <Status>PROCESSING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:08:00</Timestamp>
+    <Tool id="CVD02"/>
+    <Temperature unit="C">419.0</Temperature>
+    <Recipe name="RCP_0043"/>
+    <ProcessStep>PURGE</ProcessStep>
+    <Chamber id="C1"/>
+    <Status>RUNNING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:08:30</Timestamp>
+    <Tool id="PVD03"/>
+    <Temperature unit="C">255.0</Temperature>
+    <Voltage unit="V">355</Voltage>
+    <Current unit="A">8.8</Current>
+    <Wafer id="WFR_007"/>
+    <Status>DEPOSITION</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:09:00</Timestamp>
+    <Tool id="ETCH01"/>
+    <Alarm code="E336" severity="INFO"/>
+    <Wafer id="WFR_004"/>
+    <Lot id="LOT_20240415"/>
+    <Status>PROCESSING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:09:30</Timestamp>
+    <Tool id="CVD02"/>
+    <Temperature unit="C">420.0</Temperature>
+    <Pressure unit="Pa">1200</Pressure>
+    <RFPower unit="W">152</RFPower>
+    <ProcessStep>DEPOSIT</ProcessStep>
+    <Chamber id="C2"/>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:10:00</Timestamp>
+    <Tool id="PVD03"/>
+    <Temperature unit="C">258.0</Temperature>
+    <Voltage unit="V">358</Voltage>
+    <Current unit="A">9.0</Current>
+    <Wafer id="WFR_009"/>
+    <Status>DEPOSITION</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:10:30</Timestamp>
+    <Tool id="ETCH01"/>
+    <Alarm code="E337" severity="CRITICAL"/>
+    <Wafer id="WFR_005"/>
+    <Lot id="LOT_20240415"/>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:11:00</Timestamp>
+    <Tool id="CVD02"/>
+    <Temperature unit="C">422.0</Temperature>
+    <Recipe name="RCP_0044"/>
+    <ProcessStep>CLEAN</ProcessStep>
+    <Chamber id="C1"/>
+    <Status>RUNNING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:11:30</Timestamp>
+    <Tool id="PVD03"/>
+    <Alarm code="A120" severity="CRITICAL"/>
+    <Temperature unit="C">260.0</Temperature>
+    <Lot id="LOT_20240415"/>
+    <Status>DEPOSITION</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:12:00</Timestamp>
+    <Tool id="ETCH01"/>
+    <Temperature unit="C">90.0</Temperature>
+    <Pressure unit="Pa">8500</Pressure>
+    <Wafer id="WFR_006"/>
+    <Status>PROCESSING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:12:30</Timestamp>
+    <Tool id="CVD02"/>
+    <Temperature unit="C">422.0</Temperature>
+    <Pressure unit="Pa">1220</Pressure>
+    <RFPower unit="W">150</RFPower>
+    <ProcessStep>DEPOSIT</ProcessStep>
+    <Chamber id="C2"/>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:13:00</Timestamp>
+    <Tool id="PVD03"/>
+    <Temperature unit="C">262.0</Temperature>
+    <Voltage unit="V">362</Voltage>
+    <Current unit="A">9.2</Current>
+    <Wafer id="WFR_013"/>
+    <Status>DEPOSITION</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:13:30</Timestamp>
+    <Tool id="ETCH01"/>
+    <Alarm code="E338" severity="WARNING"/>
+    <Wafer id="WFR_007"/>
+    <Lot id="LOT_20240416"/>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:14:00</Timestamp>
+    <Tool id="CVD02"/>
+    <Temperature unit="C">423.0</Temperature>
+    <Recipe name="RCP_0042"/>
+    <ProcessStep>DEPOSIT</ProcessStep>
+    <Chamber id="C2"/>
+    <Status>RUNNING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:14:30</Timestamp>
+    <Tool id="PVD03"/>
+    <Temperature unit="C">264.0</Temperature>
+    <Voltage unit="V">364</Voltage>
+    <Current unit="A">9.3</Current>
+    <Wafer id="WFR_015"/>
+    <Status>IDLE</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:15:00</Timestamp>
+    <Tool id="ETCH01"/>
+    <Temperature unit="C">92.0</Temperature>
+    <Pressure unit="Pa">8300</Pressure>
+    <Wafer id="WFR_008"/>
+    <Status>PROCESSING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:15:30</Timestamp>
+    <Tool id="CVD02"/>
+    <Alarm code="E004" severity="WARNING"/>
+    <ProcessStep>PURGE</ProcessStep>
+    <Chamber id="C1"/>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:16:00</Timestamp>
+    <Tool id="PVD03"/>
+    <Alarm code="A121" severity="INFO"/>
+    <Temperature unit="C">266.0</Temperature>
+    <Lot id="LOT_20240416"/>
+    <Status>DEPOSITION</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:16:30</Timestamp>
+    <Tool id="ETCH01"/>
+    <Alarm code="E339" severity="INFO"/>
+    <Wafer id="WFR_009"/>
+    <Lot id="LOT_20240416"/>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:17:00</Timestamp>
+    <Tool id="CVD02"/>
+    <Temperature unit="C">424.0</Temperature>
+    <Pressure unit="Pa">1250</Pressure>
+    <RFPower unit="W">155</RFPower>
+    <ProcessStep>DEPOSIT</ProcessStep>
+    <Chamber id="C1"/>
+    <Status>RUNNING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:17:30</Timestamp>
+    <Tool id="PVD03"/>
+    <Temperature unit="C">268.0</Temperature>
+    <Voltage unit="V">368</Voltage>
+    <Current unit="A">9.5</Current>
+    <Wafer id="WFR_019"/>
+    <Status>DEPOSITION</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:18:00</Timestamp>
+    <Tool id="ETCH01"/>
+    <Alarm code="E340" severity="WARNING"/>
+    <Wafer id="WFR_010"/>
+    <Lot id="LOT_20240416"/>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:18:30</Timestamp>
+    <Tool id="CVD02"/>
+    <Temperature unit="C">425.0</Temperature>
+    <Recipe name="RCP_0046"/>
+    <ProcessStep>DEPOSIT</ProcessStep>
+    <Chamber id="C2"/>
+    <Status>RUNNING</Status>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:19:00</Timestamp>
+    <Tool id="PVD03"/>
+    <Alarm code="A122" severity="CRITICAL"/>
+    <Temperature unit="C">270.0</Temperature>
+    <Lot id="LOT_20240416"/>
+  </LogEntry>
+  <LogEntry>
+    <Timestamp>2024-04-15T12:19:30</Timestamp>
+    <Tool id="ETCH01"/>
+    <Temperature unit="C">94.0</Temperature>
+    <Pressure unit="Pa">8200</Pressure>
+    <Wafer id="WFR_011"/>
+    <Status>PROCESSING</Status>
+  </LogEntry>
+</Logs>

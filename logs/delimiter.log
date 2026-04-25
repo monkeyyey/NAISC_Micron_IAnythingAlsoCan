@@ -1,0 +1,9 @@
+timestamp|level|host|service|latency_ms|message
+2024-01-15T10:23:01Z|INFO|app-01|api-gateway|12|Request routed to upstream
+2024-01-15T10:23:05Z|ERROR|db-01|postgres|30450|Query timeout - index scan exceeded limit
+2024-01-15T10:23:10Z|WARN|app-02|cache|5|Eviction rate elevated: 1200 keys/s
+2024-01-15T10:23:15Z|DEBUG|app-01|auth|3|JWT validated for user_id=8821
+2024-01-15T10:23:20Z|INFO|lb-01|haproxy|1|Health check passed for backend app-01
+2024-01-15T10:23:25Z|CRITICAL|app-03|worker|missing_col
+2024-01-15T10:23:30Z|INFO|app-01|api-gateway|8|Response 200 OK - 4.2KB payload
+2024-01-15T10:23:35Z|ERROR|app-02|scheduler|45|Failed to acquire distributed lock after 3 attempts

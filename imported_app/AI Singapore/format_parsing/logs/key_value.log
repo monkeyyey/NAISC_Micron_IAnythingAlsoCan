@@ -1,0 +1,10 @@
+ts=2024-01-15T10:23:01Z level=info msg="Service started" host=app-01 pid=4521 version=2.3.1
+ts=2024-01-15T10:23:05Z level=debug msg="Cache miss" host=app-01 key=user:4892 latency=3ms
+ts=2024-01-15T10:23:10Z level=error msg="Query timeout" host=db-01 query_id=882 duration=30450ms rows_scanned=1500000
+ts=2024-01-15T10:23:15Z level=warn  msg="High memory" host=app-02 mem_used=7800MB mem_total=8192MB threshold=90%
+ts=2024-01-15T10:23:20Z level=info  msg="Request processed" host=app-01 method=GET path=/api/users status=200 duration=45ms
+time="2024-01-15 10:23:25" severity:ERROR component:cache reason:"eviction policy triggered" evicted_keys=42000 temperature=72C
+time="2024-01-15 10:23:30" severity:INFO  component:scheduler jobs_pending=17 jobs_running=4 cpu_load=0.65
+only_one_pair=value
+key_without_value
+ts=2024-01-15T10:23:35Z level=info msg="Backup completed" host=backup-01 size=15GB duration=1800s status=success

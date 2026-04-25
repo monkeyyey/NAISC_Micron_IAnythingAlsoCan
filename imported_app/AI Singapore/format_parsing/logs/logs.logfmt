@@ -1,0 +1,3 @@
+ts=2024-01-15T10:23:01Z level=info msg="Tool ETCH01 triggered alarm E334" tool=ETCH01 temp=72C
+ts=2024-01-15T10:23:05Z level=error msg="Chamber pressure exceeded threshold" tool=ETCH02 pressure=1200Pa
+ts=2024-01-15T10:23:10Z level=warn msg="Gas flow unstable" tool=ETCH03 chamber=C2 alarm=E451

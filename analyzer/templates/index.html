@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fab Tool Log Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Dynamic Analyzer</p>
+        <h1>Microchip Tool Log Command Center</h1>
+        <p class="hero-copy">Track signal mappings, confidence drift, and emerging tool-alarm signatures across fab machinery log databases.</p>
+      </div>
+      <nav class="topbar-nav">
+        <a class="nav-link active" href="/analyzer/">Analyzer</a>
+        <a class="nav-link" href="/pipeline/">Pipeline Dashboard</a>
+      </nav>
+      <div class="db-status">
+        <p class="eyebrow">Active Database</p>
+        <p class="db-path" id="dbPath">Loading database...</p>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="control-section">
+          <h2>Databases</h2>
+          <form id="uploadForm" class="upload-form">
+            <label>
+              Upload SQLite DB
+              <input id="databaseUpload" type="file" name="database" accept=".db,.sqlite,.sqlite3,.db3">
+            </label>
+            <button id="uploadButton" type="submit">Add database</button>
+          </form>
+          <p id="databaseMessage" class="muted"></p>
+          <div id="databaseList" class="database-list">Loading databases...</div>
+        </section>
+
+        <section class="control-section">
+          <h2>Tables</h2>
+          <div id="tableList" class="table-list">Loading tables...</div>
+        </section>
+
+        <section class="control-section">
+          <h2>Chart Builder</h2>
+          <label>
+            Chart type
+            <select id="chartTypeSelect">
+              <option value="bar">Horizontal bars</option>
+              <option value="donut">Donut</option>
+              <option value="column">Columns</option>
+            </select>
+          </label>
+          <label>
+            Dimension
+            <select id="dimensionSelect"></select>
+          </label>
+          <label>
+            Aggregation
+            <select id="aggregationSelect">
+              <option value="count">Count rows</option>
+              <option value="sum">Sum</option>
+              <option value="avg">Average</option>
+              <option value="min">Minimum</option>
+              <option value="max">Maximum</option>
+            </select>
+          </label>
+          <label>
+            Metric
+            <select id="metricSelect"></select>
+          </label>
+          <button id="drawChart" type="button">Draw chart</button>
+        </section>
+
+        <section class="control-section">
+          <h2>View Options</h2>
+          <label>
+            Rows to preview
+            <select id="rowLimitSelect">
+              <option value="25">25 rows</option>
+              <option value="50">50 rows</option>
+              <option value="100" selected>100 rows</option>
+              <option value="250">250 rows</option>
+              <option value="500">500 rows</option>
+            </select>
+          </label>
+          <button id="downloadCsv" type="button" class="secondary-button">Download visible rows</button>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <div class="summary-grid" id="summaryGrid"></div>
+
+        <section class="panel hero-panel">
+          <div class="hero-grid">
+            <article class="hero-callout">
+              <p class="eyebrow">Fab Floor Brief</p>
+              <h2 id="missionTitle">Select a table to inspect signal health</h2>
+              <p id="missionNarrative" class="hero-text">Load a machinery log registry to surface extraction coverage, confidence drift, and recent mapping changes.</p>
+            </article>
+            <div class="hero-stack">
+              <article class="status-tile">
+                <span>Signal Coverage</span>
+                <strong id="coverageHeadline">--</strong>
+                <small id="coverageDetail">Awaiting table selection</small>
+              </article>
+              <article class="status-tile">
+                <span>Risk Watch</span>
+                <strong id="watchHeadline">--</strong>
+                <small id="watchDetail">No watchlist yet</small>
+              </article>
+              <article class="status-tile">
+                <span>Latest Change</span>
+                <strong id="freshnessHeadline">--</strong>
+                <small id="freshnessDetail">No update clock yet</small>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Signal Coverage</p>
+              <h2>Captured fab telemetry</h2>
+            </div>
+          </div>
+          <div id="signalCoverage" class="signal-grid"></div>
+        </section>
+
+        <section class="dual-grid">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Confidence Bands</p>
+                <h2>Mapping quality mix</h2>
+              </div>
+            </div>
+            <div id="confidenceBands" class="mini-chart"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Format Pulse</p>
+                <h2>Dominant machine log shapes</h2>
+              </div>
+            </div>
+            <div id="formatPulse" class="list-panel"></div>
+          </section>
+        </section>
+
+        <section class="dual-grid">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Watchlist</p>
+                <h2>Mappings needing attention</h2>
+              </div>
+            </div>
+            <div id="watchlistPanel" class="list-panel"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Change Monitor</p>
+                <h2>Most recent signature edits</h2>
+              </div>
+            </div>
+            <div id="activityPanel" class="list-panel"></div>
+          </section>
+        </section>
+
+        <section class="panel chart-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Visualization Lab</p>
+              <h2 id="chartTitle">Select a table</h2>
+            </div>
+            <div class="chart-meta">
+              <p id="chartNote" class="muted"></p>
+              <p id="chartTotal" class="metric-chip"></p>
+            </div>
+          </div>
+          <div id="chart"><div class="chart-empty">Choose a table to build a chart.</div></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Schema Sensors</p>
+              <h2>Column health</h2>
+            </div>
+          </div>
+          <div id="fieldCards" class="field-grid"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Inspection Console</p>
+              <h2 id="dataTitle">Rows</h2>
+            </div>
+            <div class="preview-tools">
+              <label class="search">
+                Search
+                <input id="searchInput" type="search" placeholder="Filter visible rows">
+              </label>
+              <p id="rowNote" class="muted"></p>
+            </div>
+          </div>
+          <div id="tablePreview" class="table-preview"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Metrology</p>
+              <h2>Column summary</h2>
+            </div>
+          </div>
+          <div id="profileTable" class="table-preview"></div>
+        </section>
+      </section>
+    </main>
+
+    <script>window.APP_BASE = {{ request.script_root|tojson }} || "";</script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

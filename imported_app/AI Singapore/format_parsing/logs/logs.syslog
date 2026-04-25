@@ -1,0 +1,3 @@
+<34>Oct 11 22:14:15 fab-host etchd[2191]: alarm E334 on chamber C1
+<13>Oct 11 22:14:20 fab-host vacuumd[778]: WARNING pressure exceeded 1200Pa
+<11>1 2024-01-15T10:23:25Z fab-gw scheduler 882 ID47 - Dispatch timeout for recipe ABC123

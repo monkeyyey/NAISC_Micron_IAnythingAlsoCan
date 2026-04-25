@@ -1,0 +1,12 @@
+2024-01-15 10:23:01 INFO  Application started successfully on port 8080
+2024-01-15 10:23:05 DEBUG Loaded 1,234 configuration entries from /etc/app/config.yaml
+2024-01-15 10:23:10 ERROR Database connection failed: timeout after 30s - retrying (attempt 1/3)
+Jan 15 10:23:12 webserver nginx[4521]: 200 GET /api/health HTTP/1.1 - 2ms
+Jan 15 10:23:15 webserver nginx[4521]: 503 GET /api/data HTTP/1.1 - 4523ms
+192.168.1.1 - alice [15/Jan/2024:10:23:20 +0000] "GET /dashboard HTTP/1.1" 200 4321
+192.168.1.2 - bob   [15/Jan/2024:10:23:21 +0000] "POST /api/login HTTP/1.1" 401 320
+[WARN] 2024-01-15T10:23:25Z  Disk usage exceeding threshold: 87% on /dev/sda1
+corrupted binary record
+[CRITICAL] 2024-01-15T10:23:30Z  Memory pressure detected - swap usage 94%
+
+2024-01-15 10:23:35 INFO  Cache hit ratio: 0.94 (last 60s window)

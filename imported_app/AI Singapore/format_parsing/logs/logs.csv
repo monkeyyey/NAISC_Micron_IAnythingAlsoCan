@@ -1,0 +1,10 @@
+timestamp,level,host,service,status_code,bytes_sent,duration_ms,message
+2024-01-15T10:23:01Z,INFO,app-01,api,200,4321,45,"GET /api/users returned 200 OK"
+2024-01-15T10:23:05Z,ERROR,db-01,postgres,,0,30450,"Connection pool exhausted - all 100 connections in use"
+2024-01-15T10:23:10Z,WARN,app-02,cache,,"","Eviction threshold crossed: 85% of max memory"
+2024-01-15T10:23:15Z,DEBUG,app-01,auth,200,128,3,"Token validation successful"
+2024-01-15T10:23:20Z,INFO,lb-01,nginx,301,0,1,"Redirecting http to https"
+2024-01-15T10:23:25Z,CRITICAL,app-03,worker,500,320,8921,"Unhandled exception in task processor"
+corrupted,,,line,with,way,too,many,extra,columns,here,overflow,data
+2024-01-15T10:23:30Z,INFO,app-01,api,204,0,22,"DELETE /api/session - session terminated"
+2024-01-15T10:23:35Z,ERROR,backup-01,backup,500,0,1800000,"Backup job failed: disk quota exceeded"

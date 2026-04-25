@@ -1,0 +1,21 @@
+<logs>
+  <log>
+    <timestamp>2024-01-15T10:23:01Z</timestamp>
+    <level>INFO</level>
+    <message>Tool ETCH01 triggered alarm E334</message>
+    <tool>ETCH01</tool>
+    <temp>72C</temp>
+  </log>
+  <log>
+    <timestamp>2024-01-15T10:23:05Z</timestamp>
+    <level>ERROR</level>
+    <message>Chamber pressure exceeded threshold</message>
+    <tool>ETCH02</tool>
+    <pressure unit="Pa">1200</pressure>
+  </log>
+  <alarm code="E451" severity="WARN">
+    <timestamp>2024-01-15T10:23:10Z</timestamp>
+    <message>Gas flow unstable</message>
+    <tool>ETCH03</tool>
+  </alarm>
+</logs>

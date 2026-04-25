@@ -1,0 +1,10 @@
+timestamp	level	host	pid	cpu_pct	mem_mb	message
+2024-01-15T10:23:01Z	INFO	app-01	4521	12.4	1024	Service healthy
+2024-01-15T10:23:05Z	DEBUG	app-01	4521	14.1	1028	GC cycle completed in 120ms
+2024-01-15T10:23:10Z	ERROR	db-01	8801	95.2	7800	Query planner OOM - killing query 882
+2024-01-15T10:23:15Z	WARN	app-02	4522	78.3	6400	Thread pool near capacity: 95/100 threads active
+2024-01-15T10:23:20Z	INFO	app-01	4521	11.9	1032	Cache warmed: 500k entries loaded in 4.2s
+2024-01-15T10:23:25Z	ERROR	app-03	9901	88.7	7950	Failed health check - removing from load balancer
+						
+2024-01-15T10:23:30Z	INFO	lb-01	1101	5.3	256	Backend app-03 removed from rotation
+2024-01-15T10:23:35Z	CRITICAL	app-03	9901	100.0	8191	OOM killer invoked - process terminated
